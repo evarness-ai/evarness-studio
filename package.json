@@ -1,0 +1,15 @@
+{
+  "name": "evarness-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lightweight visual studio for evarness — vanilla TypeScript, zero runtime dependencies.",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "esbuild src/main.ts --bundle --outfile=dist/app.js --format=iife --target=es2020 && cp src/index.html dist/index.html && cp src/styles.css dist/styles.css",
+    "serve": "python3 server.py"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "typescript": "5.7.3"
+  }
+}
