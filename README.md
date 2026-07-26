@@ -1,9 +1,10 @@
 # Evarness Studio
 
-**A visual studio for provable agent harnesses — vanilla TypeScript, zero
-runtime dependencies.**
+**The visual UI of [Evarness](https://github.com/evarness-ai/evarnesslab) —
+vanilla TypeScript, zero runtime dependencies.**
 
-Studio is the lightweight companion UI to [`evarness`](https://github.com/evarness-ai/evarnesslab):
+Studio is an Evarness product: the interface to the `evarness` library, and
+the surface where its future visual features land. Today it is
 a pattern library, a drag-and-drop graph builder with type-checked
 connections and schema-generated inspector forms, a replay view with the
 playhead mechanics of the render artifacts (dim → glow → done, red block,
@@ -30,3 +31,5 @@ python3 server.py    # http://localhost:8787
 
 See [docs/SCOPE.md](docs/SCOPE.md) — the screen-by-screen parity plan
 against the reference UI, including what v1 deliberately leaves out and why.
+Studio grows with the product: features graduate here as the library ships
+them (experiments, publishing, catalog are on the roadmap in SCOPE.md).
