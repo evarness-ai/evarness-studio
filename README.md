@@ -1,6 +1,6 @@
 # Evarness Studio
 
-**The visual UI of [Evarness](https://github.com/evarness-ai/evarnesslab) —
+**The visual UI of [Evarness](https://github.com/evarness-ai/evarness) —
 vanilla TypeScript, zero runtime dependencies.**
 
 Studio is an Evarness product: the interface to the `evarness` library, and
