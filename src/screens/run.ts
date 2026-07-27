@@ -319,12 +319,27 @@ function renderBundleBar(bar: HTMLElement, host: HTMLElement, go: (screen: strin
   bar.innerHTML = "";
   const head = document.createElement("div");
   head.className = "masthead";
-  head.innerHTML = `<div class="title"><span class="badge ${b.badge.cls}">${b.badge.text}</span><div><h1></h1><div class="subtitle"></div></div></div>`;
+  // the claim badge is only shown as trustworthy when integrity verified;
+  // an invalid bundle takes over the masthead entirely
+  const invalid = b.integrity.cls === "failed";
+  const shown = invalid ? [b.integrity] : [b.badge, b.integrity, b.signature];
+  const badgeHtml = shown
+    .map((badge) => `<span class="badge ${badge.cls}"></span>`)
+    .join("");
+  head.innerHTML = `<div class="title">${badgeHtml}<div><h1></h1><div class="subtitle"></div></div></div>`;
+  head.querySelectorAll(".badge").forEach((el, i) => {
+    (el as HTMLElement).textContent = shown[i].text;
+  });
   (head.querySelector("h1") as HTMLElement).textContent =
     String(b.subject["graph_name"] ?? b.subject["graph_id"] ?? "proof");
   const subtitleBits = [`${b.scenarios.length} scenario(s)`];
+  if (invalid) {
+    const failed = b.verification.checks.find((c) => c.check !== "signature" && c.ok === false);
+    subtitleBits.unshift(
+      `stored claim "${b.badge.text}" is NOT trustworthy — ${failed?.check ?? "integrity"} failed: ${failed?.detail ?? ""}`,
+    );
+  }
   if (b.note) subtitleBits.push(b.note);
-  if (b.signed) subtitleBits.push("signed — signature NOT checked by this page; run evarness verify");
   (head.querySelector(".subtitle") as HTMLElement).textContent = subtitleBits.join(" · ");
   bar.appendChild(head);
 

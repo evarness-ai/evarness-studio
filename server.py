@@ -24,7 +24,7 @@ from pathlib import Path
 
 from evarness.core.executor import GraphValidationError, execute
 from evarness.core.graph import GraphModel, lint, migrate
-from evarness.core.prove import graph_hash
+from evarness.core.prove import graph_hash, verify_proof
 from evarness.core.registry import NODE_TYPES
 from evarness.core.trace import canonical_trace, trace_digest
 from evarness.domains.agents import patterns
@@ -109,6 +109,30 @@ def _bundle_graph(bundle: dict) -> tuple[dict | None, str | None]:
     return json.loads(graph.model_dump_json(by_alias=True)), None
 
 
+def _integrity_badges(verification: dict) -> tuple[dict, dict]:
+    """Two independent judgments from one verify_proof result: bundle
+    integrity (digests, chains, counts, verdict consistency) and the
+    signature. The claim badge is only as trustworthy as these say."""
+    checks = verification["checks"]
+    sig = next((c for c in checks if c["check"] == "signature"), None)
+    core = [c for c in checks if c["check"] != "signature"]
+    if any(c["ok"] is False for c in core):
+        integrity = {"text": "BUNDLE INVALID", "cls": "failed"}
+    elif any(c["ok"] is None for c in core):
+        integrity = {"text": "PARTIALLY CHECKABLE", "cls": "pending"}
+    else:
+        integrity = {"text": "INTEGRITY VERIFIED", "cls": "holds"}
+    if sig is None or (sig["ok"] is None and "unsigned" in sig["detail"]):
+        signature = {"text": "UNSIGNED", "cls": "nothing"}
+    elif sig["ok"] is True:
+        signature = {"text": "SIGNATURE VERIFIED", "cls": "holds"}
+    elif sig["ok"] is None:
+        signature = {"text": "SIGNATURE UNVERIFIED", "cls": "pending"}
+    else:
+        signature = {"text": "SIGNATURE INVALID", "cls": "failed"}
+    return integrity, signature
+
+
 def _import_bundle(body: dict) -> dict:
     bundle = body["bundle"]
     if "proof_version" not in bundle:
@@ -117,9 +141,16 @@ def _import_bundle(body: dict) -> dict:
     verdict = bundle.get("verdict") or {}
     declared = list(subject.get("invariants_declared") or [])
     text, cls = _BADGES["nothing"] if not declared else _BADGES[verdict.get("ok")]
+    # never display a claim as established when the evidence wasn't checked:
+    # the stored verdict is re-verified the same way `evarness verify` does
+    verification = verify_proof(bundle)
+    integrity, signature = _integrity_badges(verification)
     graph, note = _bundle_graph(bundle)
     return {
         "badge": {"text": text, "cls": cls},
+        "integrity": integrity,
+        "signature": signature,
+        "verification": verification,
         "verdict": verdict,
         "subject": subject,
         "not_proven": bundle.get("not_proven") or [],

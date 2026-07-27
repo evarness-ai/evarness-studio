@@ -13,8 +13,12 @@ a pattern library, a drag-and-drop graph builder with type-checked
 connections and schema-generated inspector forms, a replay view with the
 playhead mechanics of the render artifacts (dim → glow → done, red block,
 edge flow), and **proof-bundle import** — open a `proof.json` and browse its
-verdict, scenarios, and replays, with the canvas drawn only when the graph's
-hash matches the bundle's pinned subject.
+verdict, scenarios, and replays. Every imported bundle is **re-verified the
+same way `evarness verify` does it** (digests, event chains, counts, verdict
+consistency, signature): the page shows the claim verdict, bundle integrity,
+and signature as three independent badges, a tampered bundle is labeled
+BUNDLE INVALID with its stored claim marked untrustworthy, and the canvas is
+drawn only when the graph's hash matches the bundle's pinned subject.
 
 No React, no canvas library, no state library: the compiled bundle is ~47KB
 of plain JavaScript. The server is Python's standard library over the

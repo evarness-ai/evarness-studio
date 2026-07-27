@@ -96,8 +96,18 @@ export interface BundleScenario {
   events?: TraceEvent[];
 }
 
+export interface VerifyCheck {
+  check: string;
+  scenario?: string;
+  ok: boolean | null;
+  detail: string;
+}
+
 export interface BundleImport {
   badge: { text: string; cls: string };
+  integrity: { text: string; cls: string };
+  signature: { text: string; cls: string };
+  verification: { ok: boolean; checks: VerifyCheck[] };
   verdict: Record<string, unknown>;
   subject: Record<string, unknown>;
   not_proven: string[];
