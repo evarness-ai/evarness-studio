@@ -1,11 +1,12 @@
-# Evarness Studio — screen-by-screen scope & parity plan
+# Evarness Studio — scope & roadmap
 
-The reference is the private lab's React UI (React 18 + React Flow + Zustand,
-~4,600 lines of TSX). Studio replicates the **product surface, not React
-Flow's internals**, in vanilla TypeScript compiled with esbuild: **zero
-runtime dependencies** — the same rule the render artifacts live by. Colors,
-node cards, and interaction idioms follow the established design language
-(deep-navy dark, group-color dots, dim→glow→done state progression).
+Studio is the visual surface of Evarness, built deliberately lightweight:
+vanilla TypeScript compiled with esbuild, **zero runtime dependencies** —
+the same rule the engine's render artifacts live by. Its design language is
+its own and consistent across every Evarness surface: group-color node dots,
+the dim→glow→done state progression, and a canvas whose geometry matches the
+render artifacts', so a graph looks the same in Studio, in a rendered HTML
+artifact, and in the proof browser.
 
 Data path: a stdlib-only Python server (`server.py`, `http.server`) over the
 installed `evarness` library — patterns, node schemas, lint, execution, and

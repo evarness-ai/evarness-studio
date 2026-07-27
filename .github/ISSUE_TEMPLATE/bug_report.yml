@@ -1,0 +1,24 @@
+name: Bug report
+description: Something in Studio behaved wrong.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Screenshots help doubly here — Studio is a visual tool.
+    validations:
+      required: true
+  - type: textarea
+    id: graph
+    attributes:
+      label: Graph or pattern
+      description: The graph.json (exported from the Builder) or the packaged pattern id.
+      render: json
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: "Browser, OS, evarness version (e.g. Chrome 138 / macOS 15 / evarness 0.1.0)."
+    validations:
+      required: true
