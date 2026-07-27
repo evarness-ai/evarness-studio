@@ -14,17 +14,17 @@ bundle import as small JSON endpoints. No FastAPI, no new Python deps.
 
 ## Parity table
 
-| Screen (reference) | Studio v1 | Notes |
+| Screen | Studio v1 | Notes |
 |---|---|---|
 | **Builder** — palette, canvas, inspector, toolbar, lint bar | **YES — core of v1** | Canvas hand-rolled (seeded from the vanilla prototype): drag nodes, port-to-port edge drawing with a temp edge, **type-checked connections** (port types from node schemas; duplicate/self rejected with the same flash messages), select → inspector, Backspace deletes. Palette grouped by concern with icons + search, drag-to-add with config defaults. Inspector forms **auto-generated from the node registry's JSON Schemas** (string/number/bool/enum → inputs; lists/objects → JSON textarea). Toolbar: lint, fixture picker, user-input override, Run. Lint bar verbatim. |
 | **RunView** — playhead replay | **YES** | The render artifacts already proved these mechanics dependency-free; Studio reuses them live: canvas states (idle-dim → active-glow → done-green, red block, incoming-edge flow), evidence pane with payload expanders, judgment pane with seek links, digest bar. |
 | *(new)* **Bundle import** | **YES — the feature this exists for** | Open a `proof.json`: tri-state verdict badge, one replayable run per scenario, canvas drawn only when the pinned `graph_sha256` matches (the E13 rule, enforced server-side). This satisfies "the bundle can be imported into the UI". |
-| **Library** — pattern cards | **YES (patterns only)** | Cards for packaged + `~/.evarness` patterns → open in Builder. Lab-only concepts deferred: harness persistence, lineages/versions, categories, run stats (Studio v1 keeps working graphs in localStorage + graph.json import/export — no server-side DB writes). |
+| **Library** — pattern cards | **YES (patterns only)** | Cards for packaged + `~/.evarness` patterns → open in Builder. Deferred concepts: harness persistence, lineages/versions, categories, run stats (Studio v1 keeps working graphs in localStorage + graph.json import/export — no server-side DB writes). |
 | **Docs** | **NO — deliberately** | The docs site (E15) is the docs surface; an in-app copy would be a second source of truth. Studio links out. |
 | **Experiments** — sweep matrix | **LATER** | Valuable, but sweeps are not yet an evarness-library surface; build when the library grows `experiments`, not before (refuse-don't-fake). |
 | **Studio (publish wizard)** | **LATER** | Publishing targets `~/.evarness/patterns/`; needs the pattern-publish surface exposed library-side first. |
 | **Catalog (tools/skills)** | **LATER** | `toolspec.py` exists library-side; palette integration is a clean follow-up. |
-| **Generate / LogsView** | **NO / LATER** | Generation is lab-specific; the activity log viewer is trivial to add once wanted (`store.py` is already there). |
+| **Generate / LogsView** | **NO / LATER** | Code generation isn't an engine surface yet; the activity log viewer is trivial to add once wanted (`store.py` is already there). |
 
 ## Deliberate v1 boundaries (stated, not hidden)
 
@@ -34,7 +34,7 @@ bundle import as small JSON endpoints. No FastAPI, no new Python deps.
   polish, not architecture.
 - **No websocket streaming** — evarness is sim-only today; runs finish in
   milliseconds, so run-then-replay covers everything until real providers
-  graduate (the lab streams because it drives live models).
+  graduate engine-side.
 - **No save-to-server** — Studio edits graphs and exports `graph.json`; runs
   persist through the library's own activity log.
 - **The server imports the agents domain directly** — Studio is presently the
