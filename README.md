@@ -1,43 +1,71 @@
 # Evarness Studio
 
-**The visual UI of [Evarness](https://github.com/evarness-ai/evarness) —
-vanilla TypeScript, zero runtime dependencies.**
+**The visual UI of [Evarness](https://github.com/evarness-ai/evarness) — build, replay, verify.**
 
-Studio is an Evarness product: the interface to the `evarness` library, and
-the surface where its future visual features land. It is **optional** — you
-never need it to run, prove, or verify a pipeline; the CLI does all of that
-headless. It is also a **local development interface**, not a hardened
-multi-user web service: the server binds to `127.0.0.1` and should stay
-there. Today it is
-a pattern library, a drag-and-drop graph builder with type-checked
-connections and schema-generated inspector forms, a replay view with the
-playhead mechanics of the render artifacts (dim → glow → done, red block,
-edge flow), and **proof-bundle import** — open a `proof.json` and browse its
-verdict, scenarios, and replays. Every imported bundle is **re-verified the
-same way `evarness verify` does it** (digests, event chains, counts, verdict
-consistency, signature): the page shows the claim verdict, bundle integrity,
-and signature as three independent badges, a tampered bundle is labeled
-BUNDLE INVALID with its stored claim marked untrustworthy, and the canvas is
-drawn only when the graph's hash matches the bundle's pinned subject.
+[![ci](https://github.com/evarness-ai/evarness-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/evarness-ai/evarness-studio/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/evarness-ai/evarness-studio)](LICENSE)
+[![deps](https://img.shields.io/badge/runtime%20deps-zero-brightgreen)](package.json)
 
-No React, no canvas library, no state library: the compiled bundle is ~47KB
-of plain JavaScript. The server is Python's standard library over the
-installed `evarness` package — no web framework. Dark and light themes
-(auto-follows the OS; a toggle overrides).
+[Evarness](https://github.com/evarness-ai/evarness) ·
+[Documentation](https://evarness-ai.github.io/evarness/) ·
+[Discussions](https://github.com/evarness-ai/evarness/discussions)
+
+Studio is the graphical side of Evarness: compose a harness on a canvas,
+watch a run replay node by node, and open a proof bundle as a browsable
+page. It is **optional by design** — the CLI does everything headless — and
+it is a **local development tool**: the server binds to `127.0.0.1`, and
+that's where it belongs.
+
+## What's inside
+
+- **Pattern library** — every packaged harness, one click from the canvas.
+- **Graph builder** — drag-and-drop nodes, type-checked connections, and
+  inspector forms generated straight from the engine's own schemas.
+- **Replay** — runs animate over the canonical event trace: nodes dim until
+  reached, glow while active, and a blocked run shows the model never lit.
+- **Proof-bundle browser** — open a `proof.json` and Studio **re-verifies it
+  the way `evarness verify` does**: claim verdict, bundle integrity, and
+  signature shown as three independent badges. A tampered bundle is labeled
+  BUNDLE INVALID, and the canvas is only ever drawn from a graph whose hash
+  matches the bundle's pinned subject.
+
+No React, no canvas library, no state library — vanilla TypeScript compiled
+to ~47 KB of plain JavaScript, and a Python standard-library server over the
+installed `evarness` package. **Zero runtime dependencies**, matching the
+engine's own story.
 
 ## Run it
 
 ```bash
-npm install          # dev toolchain only: typescript + esbuild, pinned
-npm run build        # -> dist/
-npm run check        # tsc --noEmit
-# in a venv where evarness is installed:
-python3 server.py    # http://localhost:8787
+npm install && npm run build      # dev toolchain: typescript + esbuild, pinned
+python3 server.py                 # in a venv where evarness is installed
+# → http://localhost:8787
 ```
 
-## Scope
+```bash
+npm run check     # types
+npm test          # TypeScript tests
+npm run test:server   # server tests (needs evarness installed)
+```
 
-See [docs/SCOPE.md](docs/SCOPE.md) — the screen-by-screen parity plan
-against the reference UI, including what v1 deliberately leaves out and why.
-Studio grows with the product: features graduate here as the library ships
-them (experiments, publishing, catalog are on the roadmap in SCOPE.md).
+## Contributing
+
+Studio grows with the product — the roadmap and the deliberate v1 boundaries
+live in [docs/SCOPE.md](docs/SCOPE.md). Good ways in:
+
+- **Use it and tell us** — friction in the builder, a confusing replay, an
+  import that surprised you: [issues](https://github.com/evarness-ai/evarness-studio/issues)
+  welcome, screenshots doubly so.
+- **Pick a boundary** — pan/zoom, undo, keyboard navigation are all wanted
+  and all deliberately unbuilt; each is a well-scoped first contribution.
+- **Talk domains** — when Evarness grows its second domain, Studio learns to
+  discover domains through the API. Ideas belong in
+  [Discussions](https://github.com/evarness-ai/evarness/discussions).
+
+One rule above all, inherited from the engine: **never display a claim as
+established when the evidence hasn't been checked.** The bundle-import tests
+are the contract — start there to understand the house style.
+
+## License
+
+[Apache-2.0](LICENSE).
