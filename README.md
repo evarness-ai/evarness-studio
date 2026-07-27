@@ -10,6 +10,8 @@
 [Documentation](https://evarness-ai.github.io/evarness/) ·
 [Discussions](https://github.com/evarness-ai/evarness/discussions)
 
+![A harness running in Studio: the governed email assistant opens from the pattern library, the run replays node by node — each turning green as it finishes, the trace streaming beside the canvas — then the hostile fixture is stopped at the interceptor, red, the model never reached, and the invariant verdict still passing](docs/assets/run-replay.gif)
+
 Studio is the graphical side of Evarness: compose a harness on a canvas,
 watch a run replay node by node, and open a proof bundle as a browsable
 page. It is **optional by design** — the CLI does everything headless — and
