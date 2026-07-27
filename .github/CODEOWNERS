@@ -1,0 +1,8 @@
+# Every path requests a review from the maintainer; branch protection
+# requires a code-owner review before merge. The server's bundle-import
+# rules are called out — the verify-on-import behavior is the page's
+# honesty contract, never a routine edit.
+* @sathishksomasundaram
+
+/server.py @sathishksomasundaram
+/tests/test_server.py @sathishksomasundaram
