@@ -36,6 +36,11 @@ bundle import as small JSON endpoints. No FastAPI, no new Python deps.
   graduate (the lab streams because it drives live models).
 - **No save-to-server** — Studio edits graphs and exports `graph.json`; runs
   persist through the library's own activity log.
+- **The server imports the agents domain directly** — Studio is presently the
+  UI for the agents domain, so `server.py` uses its patterns and fixtures
+  by name. When a second domain exists, discovery moves to public extension
+  registries (a `/api/domains` shape); generalizing before that would be
+  guessing the interface.
 
 ## Dependency policy
 

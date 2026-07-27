@@ -2,11 +2,13 @@
   "name": "evarness-studio",
   "version": "0.1.0",
   "private": true,
-  "description": "Lightweight visual studio for evarness — vanilla TypeScript, zero runtime dependencies.",
+  "description": "Lightweight visual studio for evarness \u2014 vanilla TypeScript, zero runtime dependencies.",
   "scripts": {
     "check": "tsc --noEmit",
     "build": "esbuild src/main.ts --bundle --outfile=dist/app.js --format=iife --target=es2020 && cp src/index.html dist/index.html && cp src/styles.css dist/styles.css",
-    "serve": "python3 server.py"
+    "serve": "python3 server.py",
+    "test": "esbuild tests/portmatch.test.ts tests/roundtrip.test.ts --bundle --platform=node --format=cjs --outdir=.test-build --out-extension:.js=.cjs && node --test .test-build/portmatch.test.cjs .test-build/roundtrip.test.cjs",
+    "test:server": "python3 -m unittest discover -s tests -p 'test_*.py' -v"
   },
   "devDependencies": {
     "esbuild": "0.25.0",

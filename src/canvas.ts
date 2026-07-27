@@ -6,6 +6,7 @@
 
 import type { GraphIR, NodeSpec } from "./types";
 import { GROUP_COLORS, NODE_H, NODE_W } from "./types";
+import { matchPort } from "./portmatch";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const GAP_X = 200;
@@ -333,18 +334,15 @@ export class Canvas {
     const srcSpec = this.specs.get(src?.type ?? "");
     const tgtSpec = this.specs.get(tgt?.type ?? "");
     const outType = srcSpec?.outputs["out"] ?? "any";
-    // pick the first input port whose type matches, else the first port
-    const inPorts = Object.entries(tgtSpec?.inputs ?? { in: "any" });
-    const match = inPorts.find(([, t]) => t === "any" || outType === "any" || t === outType) ?? inPorts[0];
-    const [inPort, inType] = match ?? ["in", "any"];
-    if (outType !== "any" && inType !== "any" && outType !== inType) {
-      const hint =
-        outType === "documents" && (inType === "prompt" || tgt?.type === "llm")
-          ? " — route documents into the Context Assembler (documents port); the LLM reads them from the prompt"
-          : "";
-      this.hooks.onFlash(`✗ Type mismatch: ${src?.type}.out (${outType}) → ${tgt?.type}.${inPort} (${inType})${hint}`);
+    const m = matchPort(outType, tgtSpec?.inputs ?? { in: "any" }, tgt?.type);
+    if (!m.ok) {
+      this.hooks.onFlash(
+        `✗ Type mismatch: ${src?.type}.out (${outType}) → ${tgt?.type}.${m.inPort} (${m.inType})${m.hint}`,
+      );
       return;
     }
+    const inPort = m.inPort;
+    const inType = m.inType;
     if (fromId === toId || ir.edges.some((e) => e.from === fromId && e.to === toId && (e.to_port ?? "in") === inPort)) {
       this.hooks.onFlash("✗ Duplicate or self-connection");
       return;
