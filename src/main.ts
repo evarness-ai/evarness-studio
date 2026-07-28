@@ -28,7 +28,7 @@ async function boot(): Promise<void> {
   const app = document.getElementById("app")!;
   app.innerHTML = `
     <aside class="side">
-      <div class="logo">evarness<span>studio</span></div>
+      <div class="logo">Evarness <span>Studio</span></div>
       <div class="sub">visual studio for provable harnesses</div>
       <button class="nav" data-nav="library">◧ Library</button>
       <button class="nav" data-nav="builder">▦ Builder</button>
