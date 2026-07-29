@@ -10,6 +10,19 @@
 [Documentation](https://evarness-ai.github.io/evarness/) ·
 [Discussions](https://github.com/evarness-ai/evarness/discussions)
 
+> **New here?** [Evarness](https://github.com/evarness-ai/evarness) is a
+> crash-test rig for AI agents — software that uses an AI model (LLM) not
+> just to chat, but to do things for you. Every agent has a **harness**: the
+> layer of plain, predictable software that decides what the AI is actually
+> allowed to do. Evarness tests that harness in practice scenarios where
+> everything is staged — no real email, no real money — and produces a
+> report anyone can double-check on their own laptop, no internet needed.
+> Studio is the visual side of that: draw the harness as a diagram, run it,
+> then replay the run like a match replay — pause on any moment and see
+> exactly what happened and why. The animation below shows exactly that,
+> ending with a bad-actor scenario stopped before it ever reaches the AI
+> model.
+
 ![A harness running in Studio: the governed email assistant opens from the pattern library, the run replays node by node — each turning green as it finishes, the trace streaming beside the canvas — then the hostile fixture is stopped at the interceptor, red, the model never reached, and the invariant verdict still passing](docs/assets/run-replay.gif)
 
 Studio is the graphical side of Evarness: compose a harness on a canvas,
